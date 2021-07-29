@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useCallback, FC } from "react";
+import { NavLink } from "react-router-dom";
 import "./Sidebar.scss";
 
 interface SideBarProps {
@@ -45,7 +46,7 @@ export const Sidebar:FC<SideBarProps> = ({ toggleOpen, sidebarIsOpen }) => {
           src={require("./assets/anonymous.svg").default}
           alt="account"
         />
-        <p className="Sidebar__account-name item--text">Евгений Павлюкевич</p>
+        <NavLink to='/' className="Sidebar__account-name item--text">Евгений Павлюкевич</NavLink>
       </>
     );
   }, []);
@@ -111,24 +112,14 @@ export const Sidebar:FC<SideBarProps> = ({ toggleOpen, sidebarIsOpen }) => {
                 {renderUserImage()}
               </li>
             </div>
-            <div className="item--wrapper">
-              <li className="Sidebar__account-item">
+            <li className="Sidebar__navigation-item item--hover">
                 <img
                   className="Sidebar__icon margin--no"
-                  src={require("./assets/energy.svg").default}
-                  alt="energy"
+                  src={require("./assets/Cabinet.svg").default}
+                  alt="course"
                 />
-                {renderEnergy()}
+                <NavLink to='/cabinet' className="Sidebar__navigation-title item--text">Кабинет</NavLink>
               </li>
-              <li className="Sidebar__account-item">
-                <img
-                  className="Sidebar__icon  margin--no"
-                  src={require("./assets/money.svg").default}
-                  alt="balance"
-                />
-                {renderAccountBalance()}
-              </li>
-            </div>
           </ul>
           <div className="Sidebar-divider" />
           <ul className="Sidebar__navigation-list">

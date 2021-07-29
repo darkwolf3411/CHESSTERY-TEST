@@ -95,6 +95,7 @@ $main-orange-color: #f27c39;
       line-height: 20px;
       display: flex;
       align-items: center;
+      text-decoration: unset;
 
       color: $main-blue-color;
 
@@ -304,6 +305,7 @@ $main-orange-color: #f27c39;
 
     .item--text {
       display: none;
+      text-decoration: unset;
     }
 
     .Sidebar__navigation-list,

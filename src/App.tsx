@@ -3,6 +3,7 @@ import { Sidebar } from './compontents/Sidebar';
 import { Redirect, Route, Switch } from 'react-router-dom'
 import CabinetPage from './compontents/CabinetPage/CabinetPage';
 import "./styles.scss";
+import ProfilePage from './compontents/ProfilePage/ProfilePage';
 
 const App:FC = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(
@@ -18,6 +19,9 @@ const App:FC = () => {
       <Switch>
         <Route path='/cabinet' exact>
           <CabinetPage />
+        </Route>
+        <Route path='/' exact>
+          <ProfilePage />
         </Route>
         <Redirect to='/' />
       </Switch>
