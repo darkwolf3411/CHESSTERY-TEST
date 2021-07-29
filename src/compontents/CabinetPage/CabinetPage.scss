@@ -99,7 +99,10 @@ $pink-color: #C200AF;
         margin: 0 auto;
         width: 92px;
         height: 105px;
-        transition: background-color .3s ease;
+        transition: background-color .4s ease;
+        img{
+            cursor: pointer;
+        }
         *{
             margin: 0 auto;
         }
@@ -144,7 +147,7 @@ $pink-color: #C200AF;
 .active-student{
     background-color: #F5E6FE;
     border-radius: 10px;
-    transition: all .3s ease;
+    transition: background-color .4s ease;
 }
 .button-pink{
     justify-content: start;
@@ -175,6 +178,23 @@ $pink-color: #C200AF;
     }
     &__navigation-wrapper{
         width: min-content;
+    }
+    &__lesson-wrapper{
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        margin-bottom: 6px;
+        span{
+            margin-left: 10px;
+            font-family: Nunito;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 20px;
+            display: flex;
+            align-items: center;
+            color: #C200AF;
+        }
     }
     &__button-list{
         display: grid;
@@ -333,6 +353,7 @@ $pink-color: #C200AF;
         grid-gap: 10px;
         padding: 0px 5px;
         span{
+            cursor: pointer;
             font-family: Nunito;
             font-style: normal;
             font-weight: bold;

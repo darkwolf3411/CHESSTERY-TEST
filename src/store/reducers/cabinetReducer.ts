@@ -362,8 +362,8 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 1',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 13,
+                            inaccuracies: 4,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -372,8 +372,8 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 2',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 32,
+                            inaccuracies: 43,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -382,8 +382,8 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 3',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 23,
+                            inaccuracies: 21,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -392,8 +392,18 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 4',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 65,
+                            inaccuracies: 43,
+                            timeSpent: '100 мин',
+                            terrikoins: 1000
+                        },
+                        {
+                            id: '3',
+                            nameOfexercise: 'Упражнение 4',
+                            isUsedSolution: false,
+                            isUsedHints: true,
+                            errors: 65,
+                            inaccuracies: 43,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -705,8 +715,8 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 1',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 31,
+                            inaccuracies: 32,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -715,8 +725,8 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 2',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 23,
+                            inaccuracies: 12,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -725,8 +735,8 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 3',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 21,
+                            inaccuracies: 24,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -735,8 +745,8 @@ const initialState: CabinetState = {
                             nameOfexercise: 'Упражнение 4',
                             isUsedSolution: false,
                             isUsedHints: true,
-                            errors: 33,
-                            inaccuracies: 16,
+                            errors: 24,
+                            inaccuracies: 12,
                             timeSpent: '100 мин',
                             terrikoins: 1000
                         },
@@ -3095,33 +3105,47 @@ const initialState: CabinetState = {
     loading: false,
     activeStudent: '0',
     searchValue: '',
-    viewingExercises: false,
+    isViewingExercises: false,
+    viewingExercisesLessonNumber: 0,
+    filtredSearchStudentsArr: [],
 }
 
 export const cabinetReducer = (state = initialState, action: CabinetAction): CabinetState => {
     switch (action.type) {
-        case CabinetActionTypes.FETCH_USERS:
+        case CabinetActionTypes.FETCH_PROGRESS:
             return{
                 ...state,
                 loading: true
             }
-        case CabinetActionTypes.SET_VIENG_EXERVISES:
-            return{
-                ...state,
-                viewingExercises: !state.viewingExercises
-            }
-        case CabinetActionTypes.FETCH_USERS_SUCCESS:
+        case CabinetActionTypes.FETCH_PROGRESS_SUCCESS:
             return{
                 ...state,
                 loading: false,
                 students: action.payload
             }
-        case CabinetActionTypes.FETCH_USERS_ERROR:
+        case CabinetActionTypes.FETCH_PROGRESS_ERROR:
             return{
                 ...state,
                 loading: false,
                 error: action.payload
             }
+        case CabinetActionTypes.SET_VIENG_EXERVISES:
+            return{
+                ...state,
+                isViewingExercises: !state.isViewingExercises
+            }
+        case CabinetActionTypes.SET_SEARCH_VALUE:
+            return{
+                ...state,
+                searchValue: action.payload,
+                filtredSearchStudentsArr: state.students.filter(student => student.name.includes(action.payload))
+            }
+            case CabinetActionTypes.CLEAR_SEARCH_VALUE:
+                return{
+                    ...state,
+                    searchValue: '',
+                    filtredSearchStudentsArr: [],
+                }
         case CabinetActionTypes.SET_ACTIVE_STUDENT:
             return{
                 ...state,
