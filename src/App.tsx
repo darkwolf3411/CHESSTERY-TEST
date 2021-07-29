@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react'
 import { Sidebar } from './compontents/Sidebar';
-import "./styles.scss";
 import { Redirect, Route, Switch } from 'react-router-dom'
 import CabinetPage from './compontents/CabinetPage/CabinetPage';
+import "./styles.scss";
 
 const App:FC = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(

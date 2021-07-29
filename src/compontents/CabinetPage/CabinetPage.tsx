@@ -1,55 +1,29 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import './CabinetPage.scss'
 import avatar from './assets/mad-scientist.svg'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { useActions } from '../../hooks/useActions'
+
+interface Student{
+    id: string;
+    name: string;
+    avatar: string;
+}
+
 const CabinetPage: FC = () => {
-    const students = [
-        {
-            id: 1,
-            name: 'Алексей',
-            avatar: avatar
-        },
-        {
-            id: 2,
-            name: 'Константин',
-            avatar: avatar
-        },
-        {
-            id: 3,
-            name: 'Александр',
-            avatar: avatar
-        },
-        {
-            id: 4,
-            name: 'Ирина',
-            avatar: avatar
-        },
-        {
-            id: 5,
-            name: 'Илья',
-            avatar: avatar
-        },
-        {
-            id: 6,
-            name: 'Никита',
-            avatar: avatar
-        },
-        {
-            id: 7,
-            name: 'Артур',
-            avatar: avatar
-        },
-        {
-            id: 8,
-            name: 'Никита',
-            avatar: avatar
-        },
-        {
-            id: 9,
-            name: 'Ирина',
-            avatar: avatar
-        },
-    ]
-    const sortArrStudents = students.sort((a, b) => a.name.localeCompare(b.name))
+    const {students, activeStudent} = useTypedSelector(store=>store.cabinet)
+    const {setActiveStudents} = useActions()
+    // const searchHendler = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    //     const searchFilterArr:Student[] = students.filter(student=> student.name.includes(e.target.value))
+    //     if(e.target.value === '') {
+    //         return setFiltredSurchArr([])
+    //     }
+    //     return setFiltredSurchArr(searchFilterArr)
+    // }
+    const setActiveStudentHandler =(e: React.MouseEvent<HTMLDivElement>)=>{
+        const target = e.target as Element;
+        setActiveStudents(target.id)
+    }
     return (
         <div>
             <div className='cabinet-wrapper'>
@@ -72,10 +46,19 @@ const CabinetPage: FC = () => {
                             </button>
                         </div>
                         <div className='control-panel__students-list'>
-                            {sortArrStudents.slice(0, 8).map(student => {
+                            {students.slice(0, 8).map(student => {
                                 return (
-                                    <div key={student.id} className='control-panel__student-wrapper'>
-                                        <img src={student.avatar} alt="avatar" />
+                                    <div 
+                                    key={student.id} 
+                                    className={activeStudent == student.id?
+                                        `control-panel__student-wrapper active-student`:
+                                        `control-panel__student-wrapper`
+                                    }>
+                                        <img 
+                                        src={student.avatar} 
+                                        alt="avatar"
+                                        onClick={setActiveStudentHandler}
+                                        id={student.id}  />
                                         <span>{student.name}</span>
                                     </div>
                                 )
@@ -106,29 +89,59 @@ const CabinetPage: FC = () => {
                             <img src={require('./assets/Arrow.svg').default} alt="" />
                         </div>
                     </nav> */}
-                        <div className='progress-section__search-wrapper'>
-                            <img className='progress-section__search-wrapper__avatar' src={sortArrStudents[0].avatar} alt="student-avatar" />
-                            <input className='progress-section__search-wrapper__search' value={sortArrStudents[0].name} type="text" />
-                            <img className='progress-section__arrow' src={require('./assets/Arrow.svg').default} alt="" />
+                        {/* <div className='progress-section__search-wrapper'>
+                            <img className='progress-section__search-wrapper__avatar' src={students[Number(activeStudent)].avatar} alt="student-avatar" />
+                            <input className='progress-section__search-wrapper__search' onChange={searchHendler} placeholder={students[Number(activeStudent)].name} type="text" />
+                            <img className={filtredSurchArr == []? 
+                                `progress-section__arrow`:
+                                `progress-section arrow-active`} src={require('./assets/Arrow.svg').default} alt="" />
                         </div>
+                        {filtredSurchArr !== [] ? 
+                        <div className='progress-section__filterd-list'>
+                            {filtredSurchArr.map(el=>{
+                                return(
+                                    <div key={el.id} id={el.id} onClick={setActiveStudentHandler} className='progress-section__filtred-element'>
+                                        <img className='progress-section__search-wrapper__avatar' src={el.avatar} alt="student-avatar" />
+                                        <span>{el.name}</span>
+                                        </div>
+                                )
+                            })}
+                        </div> 
+                        : null} */}
                     </nav>
-                    <table className="iksweb">
+                    <div className="progress-section__table">
+                    <table className="progress-section__table-wrapper">
                         <thead>
-                            <tr>
-                                <td>№</td>
-                                <td>Название урока</td>
-                                <td>Упражнений в уроке</td>
-                                <td>Упражнений выполнено</td>
-                                <td>Ошибок</td>
-                                <td>Неточности</td>
-                                <td>Потречаенное время</td>
-                                <td>Заработано террикоинов</td>
+                            <tr className="progress-section__table-head">
+                                <th>№</th>
+                                <th>Название урока</th>
+                                <th>Упражнений в уроке</th>
+                                <th>Упражнений выполнено</th>
+                                <th>Ошибок</th>
+                                <th>Неточности</th>
+                                <th>Потречаенное время</th>
+                                <th>Заработано террикоинов</th>
                             </tr>
                         </thead>
                         <tbody>
-
+                            {students[Number(activeStudent)].lessons.map(lesson=>{
+                                const numb = 0
+                               return (
+                                <tr className="progress-section__table-body">
+                                    <td>{Number(lesson.id)+1}</td>
+                                    <td>{lesson.nameOflesson}</td>
+                                    <td>{lesson.countOfExercises}</td>
+                                    <td>{lesson.countIsReadyExercises}</td>
+                                    <td>{lesson.exercises[numb].errors}</td>
+                                    <td>{lesson.exercises[numb].inaccuracies}</td>
+                                    <td>{lesson.exercises[numb].timeSpent}</td>
+                                    <td>{lesson.exercises[numb].terrikoins}</td>
+                                </tr>
+                            ) 
+                            })}
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
