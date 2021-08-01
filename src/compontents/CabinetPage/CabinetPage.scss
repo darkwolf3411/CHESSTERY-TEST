@@ -33,8 +33,28 @@ $pink-color: #C200AF;
         grid-template-columns: repeat(2,max-content);
         grid-gap: 20px;
         list-style-type: none;
+        :nth-child(1){
+            &.active-tab::after{
+                z-index: 10;
+                content: '';
+                position: absolute;
+                top: 25px;
+                left: 0;
+                right: 0;
+                border: 2px solid #235390;
+            }
+        }
         :nth-child(2){
             color: $pink-color;
+            &.active-tab::after{
+                z-index: 10;
+                content: '';
+                position: absolute;
+                top: 25px;
+                left: 0;
+                right: 0;
+                border: 2px solid $pink-color;
+            }
             &:hover::after{
                 z-index: 10;
                 content: '';
@@ -243,13 +263,20 @@ $pink-color: #C200AF;
         height: 17px;
         margin-right: 5px;
         transition: all .5s ease;
+        &.arrow-active{
+            transform: rotate(180deg);
+            transition: all .5s ease;
+        }
     }
     &__search-wrapper{
         display: flex;
+        position: relative;
         width: 181px;
-        z-index: 1101;
         margin-left: auto;
         align-items: center;
+        *{
+            z-index: 1101;
+        }
         &__avatar{
             width: 30px;
             height: 30px;
@@ -277,6 +304,35 @@ $pink-color: #C200AF;
             &:focus{
                 outline: none;
             }
+        }
+    }
+    &__filterd-list{
+        position: absolute;
+        z-index: 10;
+        right: 0;
+        top: 0;
+        display: grid;
+        background-color: white;
+        align-items: center;
+        width: 186px;
+        padding-top: 41px;
+    }
+    &__filtred-element{
+        display: flex;
+        align-items: center;
+        grid-gap: 5px;
+        padding: 5px 5px;
+        &:hover{
+            background-color: rgb(221, 221, 221);
+        }
+        span{
+            cursor: pointer;
+            font-family: Nunito;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 20px;
+            color: #4F4F4F;
         }
     }
     &__table{
@@ -335,41 +391,9 @@ $pink-color: #C200AF;
             color: #4F4F4F;
         }
     }
-    &__filterd-list{
-        position: absolute;
-        z-index: 10;
-        right: 0px;
-        top: 15px;
-        background-color: white;
-        display: grid;
-        grid-gap: 10px;
-        align-items: center;
-        width: 186px;
-        padding-top: 41px;
-    }
-    &__filtred-element{
-        display: flex;
-        align-items: center;
-        grid-gap: 10px;
-        padding: 0px 5px;
-        span{
-            cursor: pointer;
-            font-family: Nunito;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 15px;
-            line-height: 20px;
-            color: #4F4F4F;
-        }
-        :hover{
-            background-color: #fff;
-        }
-    }
+    
 }
-.arrow-active{
-    transform: rotate(180deg);
-    transition: all .5s ease;
-}
+
 tbody{
     :last-child td{
         border-bottom: unset;

@@ -3123,6 +3123,11 @@ export const cabinetReducer = (state = initialState, action: CabinetAction): Cab
                 loading: false,
                 students: action.payload
             }
+        case CabinetActionTypes.SET_VIENG_EXERVISES_LESSON_NUMBER:
+            return{
+                ...state,
+                viewingExercisesLessonNumber: action.payload
+            }
         case CabinetActionTypes.FETCH_PROGRESS_ERROR:
             return{
                 ...state,
@@ -3140,12 +3145,12 @@ export const cabinetReducer = (state = initialState, action: CabinetAction): Cab
                 searchValue: action.payload,
                 filtredSearchStudentsArr: state.students.filter(student => student.name.includes(action.payload))
             }
-            case CabinetActionTypes.CLEAR_SEARCH_VALUE:
-                return{
-                    ...state,
-                    searchValue: '',
-                    filtredSearchStudentsArr: [],
-                }
+        case CabinetActionTypes.CLEAR_SEARCH_VALUE:
+            return{
+                ...state,
+                searchValue: '',
+                filtredSearchStudentsArr: [],
+            }
         case CabinetActionTypes.SET_ACTIVE_STUDENT:
             return{
                 ...state,

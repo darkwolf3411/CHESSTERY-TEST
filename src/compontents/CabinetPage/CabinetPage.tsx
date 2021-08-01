@@ -1,15 +1,13 @@
-import React, { FC } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import './CabinetPage.scss'
 import { useTypedSelector } from '../../hooks/useTypedSelector'
 import { useActions } from '../../hooks/useActions'
 
-interface Student {
-    id: string;
-    name: string;
-    avatar: string;
-}
 
 const CabinetPage: FC = () => {
+    const tableRef = useRef<HTMLTableRowElement>(null)
+    const [toggleGroupOrStudent, setToggleGroupOrStudent] = useState('students')
+    // const [toggleGroupOrStudent, setToggleGroupOrStudent] = useState('group')
     const { students,
         activeStudent,
         isViewingExercises,
@@ -28,10 +26,10 @@ const CabinetPage: FC = () => {
         // onBlur={()=>clearSearchValue()}
         clearSearchValue()
     }
-    const lessonClickHundler = (e: React.MouseEvent<HTMLDivElement>) => {
-        const target = e.target as HTMLDivElement;
+    const lessonClickHundler = (e: React.MouseEvent<HTMLTableSectionElement>)=> {
+        const target = e.target as HTMLElement
         setisViewingExercises()
-        setViewingExercisesLessonNumber(Number(target.id)) /// почему-то возвращает пустую стрку вместо id урока
+        setViewingExercisesLessonNumber(Number(target.parentElement?.id))
     }
     const changeViewvingHandler = () => {
         if (isViewingExercises) {
@@ -39,7 +37,6 @@ const CabinetPage: FC = () => {
         }
     }
     const searchHendler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const searchFilterArr: Student[] = filtredSearchStudentsArr
         setFiltredArr(e.target.value)
         if (e.target.value === '') {
             return setFiltredArr('')
@@ -51,8 +48,12 @@ const CabinetPage: FC = () => {
                 <div className='my-students__wrapper'>
                     <h1 className='my-students__title'>Мои ученики</h1>
                     <ul className='my-students__button-list'>
-                        <li className='my-students__button-item'>Ученики</li>
-                        <li className='my-students__button-item'>Группы</li>
+                        <li onClick={()=>setToggleGroupOrStudent('students')}
+                         className={toggleGroupOrStudent === 'students'?'my-students__button-item active-tab':
+                    'my-students__button-item'}>Ученики</li>
+                        <li onClick={()=>setToggleGroupOrStudent('group')}
+                         className={toggleGroupOrStudent === 'group' ? 'my-students__button-item active-tab' :
+                            'my-students__button-item'}>Группы</li>
                     </ul>
                     <div className='my-students__divider' />
                     <div className='control-panel__wrapper'>
@@ -102,7 +103,7 @@ const CabinetPage: FC = () => {
                         {isViewingExercises ?
                             <div className='progress-section__lesson-wrapper'>
                                 <img src={require('./assets/Arrow-pink-right.svg').default} alt="arrow-right" />
-                                <span>Урок {viewingExercisesLessonNumber + 1}</span>
+                                <span>Урок {viewingExercisesLessonNumber+1}</span>
                             </div>
                             : null}
                         {/* Доделать выпдающий список */}
@@ -129,14 +130,29 @@ const CabinetPage: FC = () => {
                                 <img src={require('./assets/Arrow.svg').default} alt="" />
                             </div>
                         </nav> */}
-                        <div className='progress-section__search-wrapper'>
-                            <img className='progress-section__search-wrapper__avatar' src={students[Number(activeStudent)].avatar} alt="student-avatar" />
-                            <input className='progress-section__search-wrapper__search' value={searchValue} onFocus={searchHendler} onChange={searchHendler} placeholder={students[Number(activeStudent)].name} type="text" />
-                            <img className={filtredSearchStudentsArr === [] ?
-                                `progress-section__arrow` :
-                                `progress-section arrow-active`} src={require('./assets/Arrow.svg').default} alt="" />
-                        </div>
-                        {filtredSearchStudentsArr !== [] ?
+                        <div 
+                        tabIndex={1}
+                        onBlur={(event)=>
+                            !event.currentTarget.contains(event.relatedTarget as Node)
+                            ? clearSearchValue()
+                            : null}
+                        className='progress-section__search-wrapper'>
+                            <img 
+                            className='progress-section__search-wrapper__avatar' 
+                            src={students[Number(activeStudent)].avatar} alt="student-avatar" />
+                            <input 
+                            className='progress-section__search-wrapper__search' 
+                            value={searchValue} 
+                            onFocus={searchHendler}
+                            onChange={searchHendler} 
+                            placeholder={students[Number(activeStudent)].name}
+                            type="text" />
+                            <img 
+                            className={filtredSearchStudentsArr.length === 0?
+                                `progress-section__arrow`:
+                                `progress-section__arrow arrow-active`} src={require('./assets/Arrow.svg').default} 
+                            alt="" />
+                            {filtredSearchStudentsArr !== [] ?
                             <div className='progress-section__filterd-list'>
                                 {filtredSearchStudentsArr.map(el => {
                                     return (
@@ -148,6 +164,7 @@ const CabinetPage: FC = () => {
                                 })}
                             </div>
                             : null}
+                        </div>
                     </nav>
                     <div className="progress-section__table">
                         {isViewingExercises ?
@@ -194,11 +211,15 @@ const CabinetPage: FC = () => {
                                         <th>Заработано террикоинов</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody
+                                onClick={lessonClickHundler}>
                                     {students[Number(activeStudent)].lessons.map(lesson => {
                                         const numb = 0
                                         return (
-                                            <tr key={lesson.id} id={lesson.id} onClick={lessonClickHundler} className="progress-section__table-body">
+                                            <tr 
+                                            key={lesson.id} 
+                                            id={lesson.id} 
+                                            ref={tableRef} className="progress-section__table-body">
                                                 <td>{Number(lesson.id) + 1}</td>
                                                 <td>{lesson.nameOflesson}</td>
                                                 <td>{lesson.countOfExercises}</td>
